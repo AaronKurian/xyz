@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 #define MAX 50
@@ -34,27 +35,23 @@ int main()
     while (base < totalFrames)
     {
         // Send frames in window
-        for (int i = base;
-             i < base + windowSize && i < totalFrames;
-             i++)
+        for (int i = base; i < base + windowSize && i < totalFrames; i++)
         {
             if (ack[i] == 0)
             {
                 printf("Sending Frame %d\n", i);
-                write(sockfd, &i, sizeof(i));
+                send(sockfd, &i, sizeof(i), 0);
             }
         }
 
         // Receive ACKs
-        for (int i = base;
-             i < base + windowSize && i < totalFrames;
-             i++)
+        for (int i = base; i < base + windowSize && i < totalFrames; i++)
         {
             if (ack[i] == 0)
             {
                 int response;
 
-                read(sockfd, &response, sizeof(response));
+                recv(sockfd, &response, sizeof(response), 0);
 
                 if (response == i)
                 {
@@ -76,7 +73,7 @@ int main()
     }
 
     int end = -1;
-    write(sockfd, &end, sizeof(end));
+    send(sockfd, &end, sizeof(end), 0);
 
     printf("All frames sent successfully!\n");
 

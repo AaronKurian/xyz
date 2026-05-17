@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 #define PORT 9000
@@ -38,7 +39,7 @@ int main()
         {
             printf("%d ", i);
 
-            write(sockfd, &i, sizeof(i));
+            send(sockfd, &i, sizeof(i), 0);
         }
 
         printf("\n");
@@ -49,7 +50,7 @@ int main()
         // Receive ACKs
         for (int i = base; i < base + windowSize && i < totalFrames; i++)
         {
-            read(sockfd, &ack, sizeof(ack));
+            recv(sockfd, &ack, sizeof(ack), 0);
 
             if (ack == i)
             {
@@ -78,7 +79,7 @@ int main()
 
     int end = -1;
 
-    write(sockfd, &end, sizeof(end));
+    send(sockfd, &end, sizeof(end), 0);
 
     printf("\nAll Frames Sent Successfully\n");
 

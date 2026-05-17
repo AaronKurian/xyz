@@ -50,9 +50,7 @@ int main(int argc, char *argv[])
     serverAddr.sin_port = htons(port);
     serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    bind(sockfd,
-         (struct sockaddr *)&serverAddr,
-         sizeof(serverAddr));
+    bind(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
 
     addr_size = sizeof(newAddr);
 

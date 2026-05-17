@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 #define MAX 50
@@ -31,7 +32,7 @@ int main()
 
     while (1)
     {
-        read(newsock, &frame, sizeof(frame));
+        recv(newsock, &frame, sizeof(frame), 0);
 
         if (frame == -1)
             break;
@@ -49,14 +50,14 @@ int main()
             received[frame] = 1;
 
             // Send ACK frame number
-            write(newsock, &frame, sizeof(frame));
+            send(newsock, &frame, sizeof(frame), 0);
         }
         else
         {
             int nack = -1;
 
             // Send NACK
-            write(newsock, &nack, sizeof(nack));
+            send(newsock, &nack, sizeof(nack), 0);
         }
     }
 
