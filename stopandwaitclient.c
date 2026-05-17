@@ -30,11 +30,11 @@ int main(int argc, char *argv[])
 
     int sockfd;
 
-    struct sockaddr_in serverAddr;
+    struct sockaddr_in server;
 
     char buffer[1024];
 
-    socklen_t addr_size;
+    socklen_t len;
 
     int frame_id = 0;
 
@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
-    memset(&serverAddr, '\0', sizeof(serverAddr));
+    memset(&server, '\0', sizeof(server));
 
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(port);
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(port);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     while (1)
     {
@@ -63,13 +63,13 @@ int main(int argc, char *argv[])
 
             strcpy(frame_send.packet.data, buffer);
 
-            sendto(sockfd, &frame_send, sizeof(Frame), 0, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+            sendto(sockfd, &frame_send, sizeof(Frame), 0, (struct sockaddr *)&server, sizeof(server));
 
             printf("Frame Sent\n");
 
-            int addr_size = sizeof(serverAddr);
+            int len = sizeof(server);
 
-            int recv_size = recvfrom(sockfd, &frame_recv, sizeof(Frame), 0, (struct sockaddr *)&serverAddr, &addr_size);
+            int recv_size = recvfrom(sockfd, &frame_recv, sizeof(Frame), 0, (struct sockaddr *)&server, &len);
 
             if (recv_size > 0 && frame_recv.sq_no == 0 && frame_recv.ack == frame_id + 1)
             {

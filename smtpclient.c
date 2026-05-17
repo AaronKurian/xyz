@@ -8,43 +8,43 @@
 #define BUFFER_SIZE 1024
 
 int main() {
-    int client_socket;
-    struct sockaddr_in server_addr;
+    int sockfd;
+    struct sockaddr_in server;
     char buffer[BUFFER_SIZE];
 
-    client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT);
-    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(PORT);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    connect(sockfd, (struct sockaddr *)&server, sizeof(server));
 
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // HELO
     strcpy(buffer, "HELO localhost\n");
-    send(client_socket, buffer, strlen(buffer), 0);
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    send(sockfd, buffer, strlen(buffer), 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // MAIL FROM
     strcpy(buffer, "MAIL FROM:<sender@example.com>\n");
-    send(client_socket, buffer, strlen(buffer), 0);
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    send(sockfd, buffer, strlen(buffer), 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // RCPT TO
     strcpy(buffer, "RCPT TO:<receiver@example.com>\n");
-    send(client_socket, buffer, strlen(buffer), 0);
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    send(sockfd, buffer, strlen(buffer), 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // DATA
     strcpy(buffer, "DATA\n");
-    send(client_socket, buffer, strlen(buffer), 0);
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    send(sockfd, buffer, strlen(buffer), 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // Message body
@@ -52,21 +52,21 @@ int main() {
 
     while (1) {
         fgets(buffer, BUFFER_SIZE, stdin);
-        send(client_socket, buffer, strlen(buffer), 0);
+        send(sockfd, buffer, strlen(buffer), 0);
 
         if (strcmp(buffer, ".\n") == 0)
             break;
     }
 
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
     // QUIT
     strcpy(buffer, "QUIT\n");
-    send(client_socket, buffer, strlen(buffer), 0);
-    recv(client_socket, buffer, BUFFER_SIZE, 0);
+    send(sockfd, buffer, strlen(buffer), 0);
+    recv(sockfd, buffer, BUFFER_SIZE, 0);
     printf("%s", buffer);
 
-    close(client_socket);
+    close(sockfd);
     return 0;
 }

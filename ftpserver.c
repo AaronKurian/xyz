@@ -7,17 +7,17 @@
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-void handle_client(int client_socket)
+void handle_client(int newsock)
 {
     char buffer[BUFFER_SIZE] = {0};
     char filename[BUFFER_SIZE] = {0};
 
-    int bytes_received = recv(client_socket, filename, BUFFER_SIZE, 0);
+    int bytes_received = recv(newsock, filename, BUFFER_SIZE, 0);
 
     if (bytes_received < 0)
     {
         perror("Error receiving filename");
-        close(client_socket);
+        close(newsock);
         return;
     }
 
@@ -26,14 +26,14 @@ void handle_client(int client_socket)
     if (file == NULL)
     {
         char *error_message = "File not found";
-        send(client_socket, error_message, strlen(error_message), 0);
+        send(newsock, error_message, strlen(error_message), 0);
         perror("File not found");
     }
     else
     {
         while (fgets(buffer, BUFFER_SIZE, file) != NULL)
         {
-            send(client_socket, buffer, strlen(buffer), 0);
+            send(newsock, buffer, strlen(buffer), 0);
             memset(buffer, 0, BUFFER_SIZE);
         }
 
@@ -41,35 +41,35 @@ void handle_client(int client_socket)
         fclose(file);
     }
 
-    close(client_socket);
+    close(newsock);
 }
 
 int main()
 {
-    int server_socket, client_socket;
+    int sockfd, newsock;
 
-    struct sockaddr_in server_addr, client_addr;
-    socklen_t addr_len = sizeof(client_addr);
+    struct sockaddr_in server, client;
+    socklen_t len = sizeof(client);
 
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (server_socket == 0)
+    if (sockfd == 0)
     {
         perror("Socket failed");
         exit(EXIT_FAILURE);
     }
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(PORT);
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons(PORT);
 
-    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    if (bind(sockfd, (struct sockaddr *)&server, sizeof(server)) < 0)
     {
         perror("Bind failed");
         exit(EXIT_FAILURE);
     }
 
-    if (listen(server_socket, 3) < 0)
+    if (listen(sockfd, 3) < 0)
     {
         perror("Listen failed");
         exit(EXIT_FAILURE);
@@ -79,9 +79,9 @@ int main()
 
     while (1)
     {
-        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
+        newsock = accept(sockfd, (struct sockaddr *)&client, &len);
 
-        if (client_socket < 0)
+        if (newsock < 0)
         {
             perror("Accept failed");
             exit(EXIT_FAILURE);
@@ -89,10 +89,10 @@ int main()
 
         printf("Client connected\n");
 
-        handle_client(client_socket);
+        handle_client(newsock);
     }
 
-    close(server_socket);
+    close(sockfd);
 
     return 0;
 }

@@ -10,17 +10,17 @@ int main()
 {
     int sockfd;
 
-    struct sockaddr_in serverAddr;
+    struct sockaddr_in server;
 
     int totalFrames, windowSize;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(PORT);
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(PORT);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    connect(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+    connect(sockfd, (struct sockaddr *)&server, sizeof(server));
 
     printf("Enter total number of frames: ");
     scanf("%d", &totalFrames);

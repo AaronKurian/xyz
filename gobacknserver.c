@@ -9,26 +9,26 @@
 int main()
 {
     int sockfd, newsockfd;
-    struct sockaddr_in serverAddr, clientAddr;
+    struct sockaddr_in server, client;
     socklen_t addr_size;
 
     int frame, expected_frame = 0;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(PORT);
-    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    server.sin_family = AF_INET;
+    server.sin_port = htons(PORT);
+    server.sin_addr.s_addr = INADDR_ANY;
 
-    bind(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+    bind(sockfd, (struct sockaddr *)&server, sizeof(server));
 
     listen(sockfd, 5);
 
     printf("Waiting for connection...\n");
 
-    addr_size = sizeof(clientAddr);
+    addr_size = sizeof(client);
 
-    newsockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &addr_size);
+    newsockfd = accept(sockfd, (struct sockaddr *)&client, &addr_size);
 
     while (1)
     {

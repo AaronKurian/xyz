@@ -9,26 +9,26 @@
 
 int main()
 {
-    int client_socket;
+    int sockfd;
 
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server;
 
     char buffer[BUFFER_SIZE] = {0};
     char filename[BUFFER_SIZE] = {0};
 
-    client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (client_socket < 0)
+    if (sockfd < 0)
     {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
     }
 
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT);
-    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_family = AF_INET;
+    server.sin_port = htons(PORT);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    if (connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    if (connect(sockfd, (struct sockaddr *)&server, sizeof(server)) < 0)
     {
         perror("Connection failed");
         exit(EXIT_FAILURE);
@@ -37,11 +37,11 @@ int main()
     printf("Enter the filename to request: ");
     scanf("%s", filename);
 
-    send(client_socket, filename, strlen(filename), 0);
+    send(sockfd, filename, strlen(filename), 0);
 
     printf("File content received:\n");
 
-    while (recv(client_socket, buffer, BUFFER_SIZE, 0) > 0)
+    while (recv(sockfd, buffer, BUFFER_SIZE, 0) > 0)
     {
         printf("%s", buffer);
         memset(buffer, 0, BUFFER_SIZE);
@@ -49,7 +49,7 @@ int main()
 
     printf("\n");
 
-    close(client_socket);
+    close(sockfd);
 
     return 0;
 }

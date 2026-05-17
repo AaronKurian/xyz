@@ -8,7 +8,6 @@ int main() {
     int sockfd;
     struct sockaddr_in server;
     char buffer[1024] = "Hello from client";
-    char response[1024];
     socklen_t len = sizeof(server);
 
     // Create UDP socket
@@ -24,8 +23,8 @@ int main() {
     printf("Message sent to server\n");
 
     // Receive response from server
-    recvfrom(sockfd, response, sizeof(response), 0, (struct sockaddr *)&server, &len);
-    printf("Message from server: %s\n", response);
+    recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&server, &len);
+    printf("Message from server: %s\n", buffer);
 
     close(sockfd);
     return 0;
