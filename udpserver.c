@@ -7,8 +7,8 @@
 int main() {
     int sockfd;
     struct sockaddr_in server, client;
-    char buffer[1024];
     socklen_t len = sizeof(client);
+    char buffer[1024];
 
     // Create UDP socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);

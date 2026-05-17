@@ -58,15 +58,9 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        int recv_size = recvfrom(sockfd,
-                                 &frame_recv,
-                                 sizeof(Frame),
-                                 0,
-                                 (struct sockaddr *)&newAddr,
-                                 &addr_size);
+        int recv_size = recvfrom(sockfd, &frame_recv, sizeof(Frame), 0, (struct sockaddr *)&newAddr, &addr_size);
 
-        if (recv_size > 0 && frame_recv.frame_kind == 1 &&
-            frame_recv.sq_no == frame_id)
+        if (recv_size > 0 && frame_recv.frame_kind == 1 && frame_recv.sq_no == frame_id)
         {
             printf("%s\n", frame_recv.packet.data);
 
@@ -76,12 +70,7 @@ int main(int argc, char *argv[])
             frame_send.ack = frame_recv.sq_no + 1;
             frame_send.frame_kind = 0;
 
-            sendto(sockfd,
-                   &frame_send,
-                   sizeof(frame_send),
-                   0,
-                   (struct sockaddr *)&newAddr,
-                   addr_size);
+            sendto(sockfd, &frame_send, sizeof(frame_send), 0, (struct sockaddr *)&newAddr, addr_size);
 
             printf("ACK Sent\n");
         }

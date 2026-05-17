@@ -63,27 +63,15 @@ int main(int argc, char *argv[])
 
             strcpy(frame_send.packet.data, buffer);
 
-            sendto(sockfd,
-                   &frame_send,
-                   sizeof(Frame),
-                   0,
-                   (struct sockaddr *)&serverAddr,
-                   sizeof(serverAddr));
+            sendto(sockfd, &frame_send, sizeof(Frame), 0, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
 
             printf("Frame Sent\n");
 
             int addr_size = sizeof(serverAddr);
 
-            int recv_size = recvfrom(sockfd,
-                                     &frame_recv,
-                                     sizeof(Frame),
-                                     0,
-                                     (struct sockaddr *)&serverAddr,
-                                     &addr_size);
+            int recv_size = recvfrom(sockfd, &frame_recv, sizeof(Frame), 0, (struct sockaddr *)&serverAddr, &addr_size);
 
-            if (recv_size > 0 &&
-                frame_recv.sq_no == 0 &&
-                frame_recv.ack == frame_id + 1)
+            if (recv_size > 0 && frame_recv.sq_no == 0 && frame_recv.ack == frame_id + 1)
             {
                 printf("ACK Received\n");
 

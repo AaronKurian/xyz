@@ -63,9 +63,7 @@ int main()
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
 
-    if (bind(server_socket,
-             (struct sockaddr *)&server_addr,
-             sizeof(server_addr)) < 0)
+    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
         perror("Bind failed");
         exit(EXIT_FAILURE);
@@ -81,9 +79,7 @@ int main()
 
     while (1)
     {
-        client_socket = accept(server_socket,
-                               (struct sockaddr *)&client_addr,
-                               &addr_len);
+        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
 
         if (client_socket < 0)
         {

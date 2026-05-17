@@ -27,9 +27,7 @@ int main()
 
     addr_size = sizeof(clientAddr);
 
-    newsockfd = accept(sockfd,
-                       (struct sockaddr *)&clientAddr,
-                       &addr_size);
+    newsockfd = accept(sockfd, (struct sockaddr *)&clientAddr, &addr_size);
 
     while (1)
     {

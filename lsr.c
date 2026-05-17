@@ -2,8 +2,8 @@
 
 int main()
 {
-    int n, cost[10][10], distance[10], visited[10], pred[10];
-    int i, j, count, mindistance, nextnode, src;
+    int n, cost[10][10], distance[10], visited[10], previous[10];
+    int i, j, count, mindistance, selectedNode, src;
 
     printf("Enter the number of nodes: ");
     scanf("%d", &n);
@@ -27,13 +27,13 @@ int main()
     for (i = 0; i < n; i++)
     {
         distance[i] = cost[src][i];
-        pred[i] = src;
+        previous[i] = src;
         visited[i] = 0;
     }
 
     distance[src] = 0;
     visited[src] = 1;
-    count = 1;
+    count = 1;            
 
     while (count < n - 1)
     {
@@ -44,24 +44,23 @@ int main()
             if (distance[i] < mindistance && !visited[i])
             {
                 mindistance = distance[i];
-                nextnode = i;
+                selectedNode = i;
             }
         }
 
-        visited[nextnode] = 1;
+        visited[selectedNode] = 1;
 
         for (i = 0; i < n; i++)
         {
             if (!visited[i])
             {
-                if (mindistance + cost[nextnode][i] < distance[i])
+                if (mindistance + cost[selectedNode][i] < distance[i])
                 {
-                    distance[i] = mindistance + cost[nextnode][i];
-                    pred[i] = nextnode;
+                    distance[i] = mindistance + cost[selectedNode][i];
+                    previous[i] = selectedNode;
                 }
             }
         }
-
         count++;
     }
 
@@ -77,7 +76,7 @@ int main()
 
             do
             {
-                j = pred[j];
+                j = previous[j];
                 printf(" <- %d", j);
 
             } while (j != src);

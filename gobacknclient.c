@@ -19,9 +19,7 @@ int main()
     serverAddr.sin_port = htons(PORT);
     serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    connect(sockfd,
-            (struct sockaddr *)&serverAddr,
-            sizeof(serverAddr));
+    connect(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
 
     printf("Enter total number of frames: ");
     scanf("%d", &totalFrames);
@@ -36,9 +34,7 @@ int main()
         printf("\nSending Window: ");
 
         // Send all frames in current window
-        for (int i = base;
-             i < base + windowSize && i < totalFrames;
-             i++)
+        for (int i = base; i < base + windowSize && i < totalFrames; i++)
         {
             printf("%d ", i);
 
@@ -51,9 +47,7 @@ int main()
         int success = 1;
 
         // Receive ACKs
-        for (int i = base;
-             i < base + windowSize && i < totalFrames;
-             i++)
+        for (int i = base; i < base + windowSize && i < totalFrames; i++)
         {
             read(sockfd, &ack, sizeof(ack));
 
