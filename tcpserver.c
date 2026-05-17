@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 int main() {
@@ -20,7 +21,7 @@ int main() {
     printf("Waiting for connection...\n");
 
     newsock = accept(sockfd, (struct sockaddr *)&client, &len);
-    read(newsock, buffer, sizeof(buffer));
+    recv(newsock, buffer, sizeof(buffer), 0);
     printf("Message: %s\n", buffer);
 
     send(newsock, "Hello from server", 17, 0);

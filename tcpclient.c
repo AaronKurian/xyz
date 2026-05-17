@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 int main() {
@@ -16,7 +17,7 @@ int main() {
 
     connect(sockfd, (struct sockaddr *)&server, sizeof(server));
     send(sockfd, buffer, strlen(buffer), 0);
-    read(sockfd, buffer, sizeof(buffer));
+    recv(sockfd, buffer, sizeof(buffer), 0);
     printf("Response: %s\n", buffer);
     close(sockfd);
 
