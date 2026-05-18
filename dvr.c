@@ -9,15 +9,15 @@ struct router
 int main()
 {
     int costmat[20][20];
-    int routers, i, j, k;
+    int routers;
 
     printf("Enter the number of routers: ");
     scanf("%d", &routers);
 
     printf("Enter the cost matrix:\n");
-    for (i = 0; i < routers; i++)
+    for (int i = 0; i < routers; i++)
     {
-        for (j = 0; j < routers; j++)
+        for (int j = 0; j < routers; j++)
         {
             scanf("%d", &costmat[i][j]);
             costmat[i][i] = 0;
@@ -30,11 +30,11 @@ int main()
     do
     {
         changed = 0;
-        for (i = 0; i < routers; i++)
+        for (int i = 0; i < routers; i++)
         {
-            for (j = 0; j < routers; j++)
+            for (int j = 0; j < routers; j++)
             {
-                for (k = 0; k < routers; k++)
+                for (int k = 0; k < routers; k++)
                 {
                     if (costmat[i][k] >= 999)
                         continue;
@@ -50,10 +50,10 @@ int main()
         }
     } while (changed);
 
-    for (i = 0; i < routers; i++)
+    for (int i = 0; i < routers; i++)
     {
         printf("\nFor router %d\n", i + 1);
-        for (j = 0; j < routers; j++)
+        for (int j = 0; j < routers; j++)
         {
             printf("Router %d via %d distance %d\n",
                    j + 1,

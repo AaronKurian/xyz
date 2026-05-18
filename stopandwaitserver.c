@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+
+#define PORT 5000
 
 typedef struct packet
 {
@@ -19,16 +20,8 @@ typedef struct frame
     Packet packet;
 } Frame;
 
-int main(int argc, char *argv[])
+int main()
 {
-    if (argc != 2)
-    {
-        printf("Usage: %s <port>\n", argv[0]);
-        exit(0);
-    }
-
-    int port = atoi(argv[1]);
-
     int sockfd;
 
     struct sockaddr_in server, client;
@@ -47,7 +40,7 @@ int main(int argc, char *argv[])
     memset(&server, '\0', sizeof(server));
 
     server.sin_family = AF_INET;
-    server.sin_port = htons(port);
+    server.sin_port = htons(PORT);
     server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     bind(sockfd, (struct sockaddr *)&server, sizeof(server));
